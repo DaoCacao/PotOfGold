@@ -7,9 +7,9 @@
 
     <EditText
         android:id="@+id/ed_price"
+        android:hint="@string/txt_price"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Price"
         android:textColor="@android:color/black"
         android:textColorHint="@android:color/darker_gray"
         android:inputType="numberDecimal"/>
@@ -18,7 +18,7 @@
         android:id="@+id/ed_comment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Comment"
+        android:hint="@string/txt_comment"
         android:textColor="@android:color/black"
         android:textColorHint="@android:color/darker_gray" />
 </LinearLayout>

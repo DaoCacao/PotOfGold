@@ -4,12 +4,13 @@
     android:layout_height="match_parent"
     android:background="@android:color/white">
 
-    <ListView
-        android:id="@+id/list_view"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/divider"
-        android:layout_alignParentTop="true" />
+        android:layout_alignParentTop="true"
+        android:overScrollMode="never" />
 
     <View
         android:id="@+id/divider"
@@ -25,6 +26,5 @@
         android:layout_alignParentBottom="true"
         android:gravity="center"
         android:padding="8dp"
-        android:text="hello"
         android:textSize="18sp" />
 </RelativeLayout>

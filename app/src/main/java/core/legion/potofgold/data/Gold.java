@@ -1,4 +1,4 @@
-package core.legion.potofgold.models;
+package core.legion.potofgold.data;
 
 import io.realm.RealmObject;
 
@@ -9,7 +9,6 @@ public class Gold extends RealmObject {
 
     public Gold() {
     }
-
     public Gold(float price, String comment) {
         this.price = price;
         this.comment = comment;
@@ -18,8 +17,14 @@ public class Gold extends RealmObject {
     public float getPrice() {
         return price;
     }
-
     public String getComment() {
         return comment;
+    }
+
+    public void setPrice(float price) {
+        this.price = price;
+    }
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 }
