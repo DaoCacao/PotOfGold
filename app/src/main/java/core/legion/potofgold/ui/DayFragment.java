@@ -64,7 +64,7 @@ public class DayFragment extends Fragment {
     public void setTotal() {
         int total = 0;
         if (!day.getGolds().isEmpty()) for (Gold gold : day.getGolds()) total += gold.getPrice();
-        txtTotal.setText(String.format(Locale.getDefault(), "%d/%d", total, AppLoader.dayLimit));
+        txtTotal.setText(String.format(Locale.getDefault(), "%d/%.02f", total, AppLoader.DAY_LIMIT));
     }
 
     public void setDate(String date) {
@@ -73,8 +73,12 @@ public class DayFragment extends Fragment {
 
     public void addNewGoldDialog() {
         View view = LayoutInflater.from(getContext()).inflate(R.layout.add_gold_layout, new LinearLayout(getContext()));
-        EditText edPrice = (EditText) view.findViewById(R.id.ed_price);
-        EditText edComment = (EditText) view.findViewById(R.id.ed_comment);
+
+        EditText edPrice = (EditText) view.findViewById(R.id.ed_first);
+        EditText edComment = (EditText) view.findViewById(R.id.ed_second);
+
+        edPrice.setHint(R.string.txt_price);
+        edComment.setHint(R.string.txt_comment);
 
         AlertDialog alertDialog = new AlertDialog.Builder(getContext())
                 .setView(view)
@@ -104,11 +108,14 @@ public class DayFragment extends Fragment {
 
     public void editGoldDialog(Gold gold) {
         View view = LayoutInflater.from(getContext()).inflate(R.layout.add_gold_layout, new LinearLayout(getContext()));
-        EditText edPrice = (EditText) view.findViewById(R.id.ed_price);
-        EditText edComment = (EditText) view.findViewById(R.id.ed_comment);
+        EditText edPrice = (EditText) view.findViewById(R.id.ed_first);
+        EditText edComment = (EditText) view.findViewById(R.id.ed_second);
 
         edPrice.setText(String.valueOf(gold.getPrice()));
+        edPrice.setHint(R.string.txt_price);
+
         edComment.setText(gold.getComment());
+        edComment.setHint(R.string.txt_comment);
 
         AlertDialog alertDialog = new AlertDialog.Builder(getContext())
                 .setView(view)
@@ -135,8 +142,14 @@ public class DayFragment extends Fragment {
                 else
                     edPrice.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.shake_txt_anim));
             });
-        });
+            alertDialog.getButton(DialogInterface.BUTTON_NEUTRAL).setOnClickListener(v -> {
+                AppLoader.realm.executeTransaction(realm -> gold.deleteFromRealm());
+                dialog.dismiss();
 
+                adapter.notifyDataSetChanged();
+                setTotal();
+            });
+        });
 
         alertDialog.show();
     }

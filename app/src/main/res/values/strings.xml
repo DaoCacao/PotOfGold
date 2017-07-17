@@ -1,10 +1,12 @@
 <resources>
     <string name="app_name">PotOfGold</string>
 
-    <string name="txt_price">price</string>
+    <string name="txt_price">Price</string>
     <string name="txt_comment">Comment</string>
 
-    <string name="txt_no_comment">no comment</string>
+    <string name="txt_day_limit">Day limit</string>
+
+    <string name="txt_no_comment">No comment</string>
 
     <string name="txt_sun">SUN</string>
     <string name="txt_mon">MON</string>
@@ -13,4 +15,5 @@
     <string name="txt_thu">THU</string>
     <string name="txt_fri">FRI</string>
     <string name="txt_sat">SAT</string>
+    <string name="settings">settings</string>
 </resources>

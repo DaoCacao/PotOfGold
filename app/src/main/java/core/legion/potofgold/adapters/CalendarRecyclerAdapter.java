@@ -3,7 +3,6 @@ package core.legion.potofgold.adapters;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.util.Pair;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
@@ -26,12 +25,35 @@ import io.realm.RealmQuery;
 
 public class CalendarRecyclerAdapter extends RecyclerView.Adapter<CalendarRecyclerAdapter.VH> {
 
+    private final int TODAY = 0;
+    private final int CURRENT_MONTH = 1;
+    private final int ANOTHER_DAY = 2;
+
     private final MonthActivity activity;
     private List<Date> cells;
+
+    private final int goodDay, goodDayTrans, badDay, badDayTrans, dayAccent;
+    private int currentDay, currentMonth, currentYear;
+
+    private int backgroundColor;
+    private int dayColor;
+    private Typeface dayTypeface;
 
     public CalendarRecyclerAdapter(MonthActivity activity) {
         this.activity = activity;
         cells = new ArrayList<>();
+
+        currentDay = AppLoader.currentDate[0];
+        currentMonth = AppLoader.currentDate[1];
+        currentYear = AppLoader.currentDate[2];
+
+        goodDay = ContextCompat.getColor(activity, R.color.goodDay);
+        goodDayTrans = ContextCompat.getColor(activity, R.color.goodDayTrans);
+
+        badDay = ContextCompat.getColor(activity, R.color.badDay);
+        badDayTrans = ContextCompat.getColor(activity, R.color.badDayTrans);
+
+        dayAccent = ContextCompat.getColor(activity, R.color.colorAccent);
     }
 
     class VH extends RecyclerView.ViewHolder {
@@ -57,34 +79,8 @@ public class CalendarRecyclerAdapter extends RecyclerView.Adapter<CalendarRecycl
 
     @Override
     public void onBindViewHolder(VH holder, int position) {
-        int[] cellDate = new int[]{
-                Integer.parseInt((String) DateFormat.format("d", cells.get(position))),
-                Integer.parseInt((String) DateFormat.format("M", cells.get(position))),
-                Integer.parseInt((String) DateFormat.format("yyyy", cells.get(position)))
-        };
 
-        RealmQuery<Day> query = AppLoader.realm.where(Day.class).equalTo("date", getDate(position));
-        int backgroundColor = ((query.count() == 0)
-                ? Color.TRANSPARENT
-                : (getTotal(query.findFirst()) > AppLoader.dayLimit)
-                ? Color.RED
-                : Color.GREEN);
-
-        int dayColor;
-        Typeface dayTypeface;
-
-        if (cellDate[2] == AppLoader.currentDate[2] && cellDate[1] == AppLoader.currentDate[1]) {
-            if (cellDate[0] == AppLoader.currentDate[0]) {
-                dayColor = Color.BLUE;
-                dayTypeface = Typeface.DEFAULT_BOLD;
-            } else {
-                dayColor = Color.BLACK;
-                dayTypeface = Typeface.DEFAULT;
-            }
-        } else {
-            dayColor = Color.GRAY;
-            dayTypeface = Typeface.DEFAULT;
-        }
+        prepareDayColors(position);
 
         holder.rootLayout.setBackgroundColor(backgroundColor);
 
@@ -112,6 +108,33 @@ public class CalendarRecyclerAdapter extends RecyclerView.Adapter<CalendarRecycl
         int total = 0;
         if (!golds.isEmpty()) for (Gold gold : golds) total += gold.getPrice();
         return total;
+    }
+
+    private void prepareDayColors(int pos) {
+        int cellDay = Integer.parseInt((String) DateFormat.format("d", cells.get(pos)));
+        int cellMonth = Integer.parseInt((String) DateFormat.format("M", cells.get(pos)));
+        int cellYear = Integer.parseInt((String) DateFormat.format("yyyy", cells.get(pos)));
+
+        RealmQuery<Day> query = AppLoader.realm.where(Day.class).equalTo("date", getDate(pos));
+        float goldTotal = (query.count() != 0) ? getTotal(query.findFirst()) : 0;
+
+        int day;
+        if (cellYear == currentYear && cellMonth == currentMonth)
+            day = (cellDay == currentDay) ?
+                    TODAY :
+                    CURRENT_MONTH;
+        else day = ANOTHER_DAY;
+
+        if (goldTotal != 0)
+            backgroundColor = (goldTotal > AppLoader.DAY_LIMIT) ?
+                    (day == TODAY || day == CURRENT_MONTH) ? badDay : badDayTrans :
+                    (day == TODAY || day == CURRENT_MONTH) ? goodDay : goodDayTrans;
+        else backgroundColor = Color.TRANSPARENT;
+
+        if (day == TODAY) dayColor = dayAccent;
+        else dayColor = (day == CURRENT_MONTH) ? Color.BLACK : Color.GRAY;
+
+        dayTypeface = (day == TODAY) ? Typeface.DEFAULT_BOLD : Typeface.DEFAULT;
     }
 }
 

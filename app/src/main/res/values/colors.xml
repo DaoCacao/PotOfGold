@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#775447</color>
-    <color name="colorPrimaryDark">#5c3f36</color>
-    <color name="colorAccent">#02a7f1</color>
+    <color name="colorPrimary">#795548</color>
+    <color name="colorPrimaryDark">#5d4037</color>
+    <color name="colorAccent">#0091ea</color>
 
-    <color name="goodDay">#4bad4f</color>
-    <color name="BadDay">#4bad4f</color>
+    <color name="goodDay">#a5d6a7</color>
+    <color name="goodDayTrans">#c8e6c9</color>
+    <color name="badDay">#ef9a9a</color>
+    <color name="badDayTrans">#ffcdd2</color>
 </resources>
