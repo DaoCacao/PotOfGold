@@ -5,6 +5,7 @@ import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateFormat;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,6 +40,8 @@ public class CalendarRecyclerAdapter extends RecyclerView.Adapter<CalendarRecycl
     private int dayColor;
     private Typeface dayTypeface;
 
+    private float goldTotal;
+
     public CalendarRecyclerAdapter(MonthActivity activity) {
         this.activity = activity;
         cells = new ArrayList<>();
@@ -59,12 +62,13 @@ public class CalendarRecyclerAdapter extends RecyclerView.Adapter<CalendarRecycl
     class VH extends RecyclerView.ViewHolder {
 
         final FrameLayout rootLayout;
-        final TextView txtDay;
+        final TextView txtDay, txtMoney;
 
         VH(View itemView) {
             super(itemView);
             rootLayout = (FrameLayout) itemView;
             txtDay = (TextView) itemView.findViewById(R.id.txt_day);
+            txtMoney = (TextView) itemView.findViewById(R.id.txt_money);
 
             rootLayout.setOnClickListener(v -> activity.showDay(getDate(getAdapterPosition())));
         }
@@ -72,9 +76,14 @@ public class CalendarRecyclerAdapter extends RecyclerView.Adapter<CalendarRecycl
 
     @Override
     public VH onCreateViewHolder(ViewGroup parent, int viewType) {
+        FrameLayout rootLayout = new FrameLayout(parent.getContext());
+        rootLayout.setLayoutParams(new FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                Gravity.CENTER));
         return new VH(LayoutInflater
                 .from(parent.getContext())
-                .inflate(R.layout.cell_item, new FrameLayout(parent.getContext())));
+                .inflate(R.layout.cell_item, rootLayout));
     }
 
     @Override
@@ -87,6 +96,10 @@ public class CalendarRecyclerAdapter extends RecyclerView.Adapter<CalendarRecycl
         holder.txtDay.setText(DateFormat.format("dd", cells.get(position)));
         holder.txtDay.setTextColor(dayColor);
         holder.txtDay.setTypeface(dayTypeface);
+
+        holder.txtMoney.setText((goldTotal != 0) ? String.valueOf(goldTotal) : "-");
+        holder.txtMoney.setTextColor(dayColor);
+        holder.txtMoney.setTypeface(dayTypeface);
     }
 
     @Override
@@ -116,7 +129,7 @@ public class CalendarRecyclerAdapter extends RecyclerView.Adapter<CalendarRecycl
         int cellYear = Integer.parseInt((String) DateFormat.format("yyyy", cells.get(pos)));
 
         RealmQuery<Day> query = AppLoader.realm.where(Day.class).equalTo("date", getDate(pos));
-        float goldTotal = (query.count() != 0) ? getTotal(query.findFirst()) : 0;
+        goldTotal = (query.count() != 0) ? getTotal(query.findFirst()) : 0;
 
         int day;
         if (cellYear == currentYear && cellMonth == currentMonth)
