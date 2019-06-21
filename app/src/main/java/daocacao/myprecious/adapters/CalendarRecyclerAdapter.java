@@ -1,9 +1,10 @@
-package core.legion.potofgold.adapters;
+package daocacao.myprecious.adapters;
 
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.RecyclerView;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.text.format.DateFormat;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -16,11 +17,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import core.legion.potofgold.AppLoader;
-import core.legion.potofgold.R;
-import core.legion.potofgold.data.Day;
-import core.legion.potofgold.data.Gold;
-import core.legion.potofgold.ui.MonthActivity;
+import daocacao.myprecious.AppLoader;
+import daocacao.myprecious.R;
+import daocacao.myprecious.data.Day;
+import daocacao.myprecious.data.Gold;
+import daocacao.myprecious.ui.MonthActivity;
 import io.realm.RealmList;
 import io.realm.RealmQuery;
 

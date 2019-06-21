@@ -1,6 +1,5 @@
-package core.legion.potofgold.adapters;
+package daocacao.myprecious.adapters;
 
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,9 +7,11 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import core.legion.potofgold.R;
-import core.legion.potofgold.data.Gold;
-import core.legion.potofgold.ui.DayFragment;
+import androidx.recyclerview.widget.RecyclerView;
+
+import daocacao.myprecious.R;
+import daocacao.myprecious.data.Gold;
+import daocacao.myprecious.ui.DayFragment;
 import io.realm.RealmList;
 
 public class GoldRecyclerAdapter extends RecyclerView.Adapter<GoldRecyclerAdapter.VH> {

@@ -1,13 +1,14 @@
-package core.legion.potofgold.ui;
+package daocacao.myprecious.ui;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -19,6 +20,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -26,11 +29,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import core.legion.potofgold.AppLoader;
-import core.legion.potofgold.adapters.CalendarRecyclerAdapter;
-import core.legion.potofgold.R;
-import core.legion.potofgold.data.Day;
-import core.legion.potofgold.data.Gold;
+import daocacao.myprecious.AppLoader;
+import daocacao.myprecious.adapters.CalendarRecyclerAdapter;
+import daocacao.myprecious.R;
+import daocacao.myprecious.data.Day;
+import daocacao.myprecious.data.Gold;
 import io.realm.RealmResults;
 
 public class MonthActivity extends AppCompatActivity {

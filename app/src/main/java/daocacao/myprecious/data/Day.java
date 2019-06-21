@@ -1,4 +1,4 @@
-package core.legion.potofgold.data;
+package daocacao.myprecious.data;
 
 import io.realm.RealmList;
 import io.realm.RealmObject;
