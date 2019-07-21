@@ -4,9 +4,7 @@ import android.content.Context
 import android.text.format.DateFormat
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import daocacao.myprecious.AppPrefs
 import daocacao.myprecious.CalendarManager
-import daocacao.myprecious.RealmManager
 import daocacao.myprecious.adapters.days.DayType.ANOTHER_DAY
 import daocacao.myprecious.adapters.days.DayType.CURRENT_MONTH
 import daocacao.myprecious.adapters.days.DayType.TODAY
@@ -14,6 +12,7 @@ import daocacao.myprecious.adapters.days.SpendingType.BELOW_LIMIT
 import daocacao.myprecious.adapters.days.SpendingType.NONE
 import daocacao.myprecious.adapters.days.SpendingType.OVER_LIMIT
 import daocacao.myprecious.data.Day
+import daocacao.myprecious.realm.RealmManager
 import java.util.*
 
 class DaysAdapter(context: Context) : RecyclerView.Adapter<DayVH>() {
@@ -57,6 +56,10 @@ class DaysAdapter(context: Context) : RecyclerView.Adapter<DayVH>() {
             spended > dayLimit -> OVER_LIMIT
             else -> NONE
         }
+    }
+
+    fun update(day: Day) {
+        notifyItemChanged(cells.indexOfFirst { day.date == DateFormat.format("d.M.yyyy", it.time) })
     }
 }
 

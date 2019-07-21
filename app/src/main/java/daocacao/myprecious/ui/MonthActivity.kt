@@ -4,13 +4,12 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentTransaction
 import daocacao.myprecious.AppPrefs
 import daocacao.myprecious.CalendarManager
 import daocacao.myprecious.DialogManager
 import daocacao.myprecious.R
-import daocacao.myprecious.RealmManager
 import daocacao.myprecious.adapters.days.DaysAdapter
+import daocacao.myprecious.realm.RealmManager
 import kotlinx.android.synthetic.main.activity_month.btn_left
 import kotlinx.android.synthetic.main.activity_month.btn_right
 import kotlinx.android.synthetic.main.activity_month.recycler_view
@@ -40,6 +39,12 @@ class MonthActivity : AppCompatActivity() {
         btn_right.setOnClickListener { calendarManager.getNextMonth(this::updateView) }
 
         calendarManager.getCurrentMonth(this::updateView)
+
+        realmManager.observable
+                .subscribe {
+                    adapter.update(it)
+                    showTotalInMonth()
+                }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -53,15 +58,8 @@ class MonthActivity : AppCompatActivity() {
             adapter.dayLimit = it
             adapter.notifyDataSetChanged()
             showTotalInMonth()
-//                    if (dayFragment.isVisible) dayFragment.setTotal()
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    override fun onBackPressed() {
-        super.onBackPressed()
-        showTotalInMonth()
-        adapter.notifyDataSetChanged()
     }
 
     private fun updateView(title: String, days: ArrayList<Date>) {
@@ -83,11 +81,8 @@ class MonthActivity : AppCompatActivity() {
     }
 
     private fun showDay(date: String) {
-        supportFragmentManager
-                .beginTransaction()
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                .replace(R.id.container_layout, DayFragment.getInstance(date))
-                .addToBackStack("gold_frag")
-                .commit()
+        DayFragment.getInstance(date).apply {
+            show(supportFragmentManager, this.javaClass.canonicalName)
+        }
     }
 }

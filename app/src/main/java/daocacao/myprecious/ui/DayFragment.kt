@@ -5,19 +5,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RelativeLayout
-import androidx.fragment.app.Fragment
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import daocacao.myprecious.AppPrefs
 import daocacao.myprecious.DialogManager
 import daocacao.myprecious.R
-import daocacao.myprecious.RealmManager
 import daocacao.myprecious.adapters.records.RecordsAdapter
 import daocacao.myprecious.data.Record
-import kotlinx.android.synthetic.main.fragment_day.fab
+import daocacao.myprecious.realm.RealmManager
 import kotlinx.android.synthetic.main.fragment_day.recycler_view
+import kotlinx.android.synthetic.main.fragment_day.textAdd
 import kotlinx.android.synthetic.main.fragment_day.txt_total
 import java.util.*
 
-class DayFragment : Fragment() {
+class DayFragment : BottomSheetDialogFragment() {
 
     companion object {
         fun getInstance(date: String) = DayFragment().apply { this.date = date }
@@ -45,7 +45,7 @@ class DayFragment : Fragment() {
         adapter.records = day.records
         adapter.onRecordClick = this::editRecord
 
-        fab.setOnClickListener { addNewGoldDialog() }
+        textAdd.setOnClickListener { addNewGoldDialog() }
 
         updateInfo()
     }
@@ -58,13 +58,16 @@ class DayFragment : Fragment() {
     }
 
     private fun editRecord(record: Record) {
-        dialogManager.showEditRecordDialog(record) { priceComment ->
-            realmManager.editRecord(record) {
+        dialogManager.showEditRecordDialog(record, { priceComment ->
+            realmManager.editRecord(day, record) {
                 it.spended = priceComment.first
                 it.comment = priceComment.second
             }
             updateInfo()
-        }
+        }, {
+            realmManager.deleteRecord(day, record)
+            updateInfo()
+        })
     }
 
     private fun updateInfo() {

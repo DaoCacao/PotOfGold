@@ -65,7 +65,7 @@ class DialogManager(private val context: Context) {
         alertDialog.show()
     }
 
-    fun showEditRecordDialog(record: Record, onSuccess: (Pair<Float, String>) -> Unit) {
+    fun showEditRecordDialog(record: Record, onEdit: (Pair<Float, String>) -> Unit, onDelete: () -> Unit) {
         val view = LayoutInflater.from(context).inflate(R.layout.dialog_add_record, null)
         view.ed_first.setText(record.spended.toString())
         view.ed_first.setHint(R.string.txt_price)
@@ -85,14 +85,14 @@ class DialogManager(private val context: Context) {
                     val price = view.ed_first.text.toString().toFloat()
                     val comment = view.ed_second.text.toString()
 
-                    onSuccess.invoke(price to comment)
+                    onEdit.invoke(price to comment)
 
                     dialog.dismiss()
                 } else
                     view.ed_first.startAnimation(AnimationUtils.loadAnimation(context, R.anim.shake_txt_anim))
             }
             alertDialog.getButton(DialogInterface.BUTTON_NEUTRAL).setOnClickListener { v ->
-                onSuccess.invoke(0f to "")
+                onDelete.invoke()
                 dialog.dismiss()
             }
         }
